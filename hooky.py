@@ -2,26 +2,22 @@ from collections import UserList, UserDict
 
 
 class Hook:
-    def add_before(self, key=None, item=None, obj=None):
+    def _add_before_func(self, key=None, item=None):
         pass
 
-    def add_after(self, key=None, item=None, obj=None):
+    def _add_after_func(self, key=None, item=None):
         pass
 
-    def del_before(self, key=None, item=None, obj=None):
+    def _del_before_func(self, key=None):
         pass
 
-    def del_after(self, key=None, item=None, obj=None):
+    def _del_after_func(self, key=None):
         pass
 
 
-class List(UserList):
+class List(UserList, Hook):
 
-    def __init__(self, initlist=None, hook=None, hook_when_init=True):
-        self._hooks = []
-        if hook:
-            self._hooks.append(hook)
-
+    def __init__(self, initlist=None, hook_when_init=True):
         super().__init__()
 
         if initlist:
@@ -31,27 +27,29 @@ class List(UserList):
                 self.extend(initlist)
 
     def __setitem__(self, i, item):  # x[i] = item, del and add
+
+        # if isinstance(i, slice):
+
+        # print('start:{}, stop:{}, step:{}'.format(i.start, i.stop, i.step))
+        # print(i.indices())
+
         del self[i]
         self.insert(i, item)
 
     # all del action should be here
     def __delitem__(self, i):  # del x[i], del
-        [hook.del_before(key=i, obj=self) for hook in self._hooks]
-
+        self._del_before_func(key=i)
         del self.data[i]
-
-        [hook.add_after(key=i, obj=self) for hook in self._hooks]
+        self._del_after_func(key=i)
 
     def append(self, item):  # add
         self.insert(len(self), item)
 
     # all add action should be here
     def insert(self, i, item):
-        [hook.add_before(key=i, item=item, obj=self) for hook in self._hooks]
-
+        self._add_before_func(key=i, item=item)
         self.data.insert(i, item)
-
-        [hook.add_after(key=i, item=item, obj=self) for hook in self._hooks]
+        self._add_after_func(key=i, item=item)
 
     def pop(self, i=-1):  # del
         x = self[i]
@@ -81,15 +79,9 @@ class List(UserList):
         return self
 
 
-class Dict(UserDict):
-
-    def __init__(self, initdict=None, hook=None, hook_when_init=True):
-        self._hooks = []
-        if hook:
-            self._hooks.append(hook)
-
+class Dict(UserDict, Hook):
+    def __init__(self, initdict=None, hook_when_init=True):
         initdict = initdict or {}
-
         super().__init__()
 
         if initdict:
@@ -100,17 +92,15 @@ class Dict(UserDict):
 
     # all set action should be here
     def __setitem__(self, key, item):
+        if key in self.keys():
+            del self[key]
 
-        [hook.add_before(key=key, item=item, obj=self) for hook in self._hooks]
-
+        self._add_before_func(key=key, item=item)
         self.data[key] = item
-
-        [hook.add_after(key=key, item=item, obj=self) for hook in self._hooks]
+        self._add_after_func(key=key, item=item)
 
     # all del action should be here
     def __delitem__(self, key):
-        [hook.del_before(key=key, obj=self) for hook in self._hooks]
-
+        self._del_before_func(key=key)
         del self.data[key]
-
-        [hook.del_after(key=key, obj=self) for hook in self._hooks]
+        self._del_after_func(key=key)

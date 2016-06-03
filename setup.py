@@ -3,7 +3,7 @@ import os
 
 NAME = "hooky"
 
-VERSION = '0.1.0'
+VERSION = '0.2.0'
 
 DESCRIPTION = 'Python module, classes with hook point to imitate list and dict for add and del'
 
@@ -30,5 +30,6 @@ setup(name=NAME,
       author_email='ObserverChan@gmail.com',
       license='MIT',
       url=URL,
-      classifiers=CLASSIFIERS
+      classifiers=CLASSIFIERS,
+      py_modules=['hooky'],
       )
