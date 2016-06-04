@@ -32,3 +32,7 @@ def test_list_add():
         add_count += 4
 
     assert add_count == l.ab_count == l.af_count
+
+
+def test_list_del():
+    
