@@ -15,16 +15,16 @@ class Hook:
         pass
 
 
-class List(UserList, Hook):
+class List(Hook, UserList):
 
     def __init__(self, initlist=None, hook_when_init=True):
         super().__init__()
 
         if initlist:
             if hook_when_init:
-                self.data.extend(initlist)
-            else:
                 self.extend(initlist)
+            else:
+                self.data.extend(initlist)
 
     def __setitem__(self, i, item):  # x[i] = item, del and add
 
@@ -79,16 +79,16 @@ class List(UserList, Hook):
         return self
 
 
-class Dict(UserDict, Hook):
+class Dict(Hook, UserDict):
     def __init__(self, initdict=None, hook_when_init=True):
         initdict = initdict or {}
         super().__init__()
 
         if initdict:
             if hook_when_init:
-                self.data.update(initdict)
-            else:
                 self.update(initdict)
+            else:
+                self.data.update(initdict)
 
     # all set action should be here
     def __setitem__(self, key, item):

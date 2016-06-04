@@ -61,5 +61,4 @@ target/
 #Ipython Notebook
 .ipynb_checkpoints
 
-test.py
-将删除 .idea/
+.idea/
