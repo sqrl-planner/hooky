@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 from hooky import List, Dict
 
 
@@ -36,6 +34,62 @@ class CountDict(Count, Dict):
         Dict.__init__(self, *args, **kwargs)
 
 
+def test_list_slice():
+    from time import time
+    from random import randrange as r
+
+    start_time = time()
+    while True:
+        l = ['s'] * r(0, 100)
+        ol = ['o'] * r(0, 100)
+
+        s = slice(r(-300, 300), r(-300, 300), r(-300, 300))
+
+        l1_e = None
+        l1 = list(l)
+        try:
+            l1[s] = ol
+        except Exception as e:
+            l1_e = e
+            pass
+
+        l2_e = None
+        l2 = List(l)
+        try:
+            l2[s] = ol
+        except Exception as e:
+            l2_e = e
+            pass
+
+        if l1_e or l2_e:
+            try:
+                assert str(l1_e) == str(l2_e)
+            except AssertionError:
+                print()
+                print('Error:')
+                print(s)
+                print('l1_e:', l1_e.__class__.__name__, ':', l1_e)
+                print('l2_e:', l1_e.__class__.__name__, ':', l2_e)
+                print()
+
+        try:
+            assert l1 == l2
+        except AssertionError:
+            print()
+            print('l1 l2 no match:')
+            print(s)
+            print('l:', l)
+            print('ol:', ol)
+            print('list:', l1)
+            print('List:', l2)
+            print()
+
+            raise AssertionError
+
+        if time() > start_time + 60 * 0.5:
+            break
+
+
 def test_list_add():
     add_count = 0
     l = CountList()
@@ -54,10 +108,12 @@ def test_list_add():
 
     assert add_count == l.ab_count == l.af_count
 
+    assert 0 == l.db_count == l.df_count
+
 
 def test_list_del():
     del_count = 0
-    l = CountList([1, 2, 3, 4, 5, 6, 7, 8, 9, 0])
+    l = CountList([1, 2, 3, 4, 5, 6, 7, 8, 9, 0], False)
 
     l.pop()
     del_count += 1
@@ -66,6 +122,8 @@ def test_list_del():
     del_count += 1
 
     assert del_count == l.db_count == l.df_count
+
+    assert 0 == l.ab_count == l.af_count
 
 
 def test_list_add_del():
@@ -90,11 +148,40 @@ def test_dict_add():
     d = CountDict()
     d['hello'] = 'world'
     d[42] = None
+    add_count += 2
+
+    d.update({None: 'a', (None, 's'): 3})
+    add_count += 2
+
+    assert add_count == d.ab_count == d.af_count
+
+    assert 0 == d.db_count == d.df_count
 
 
 def test_dict_del():
-    pass
+    del_count = 0
+
+    d = CountDict({'hello': 'world', 42: None, None: 'a', (None, 's'): 3})
+
+    d.pop(42)
+    del_count += 1
+
+    d[None] = 'b'
+    del_count += 1
+
+    assert del_count == d.db_count == d.df_count
 
 
 def test_dict_add_del():
-    pass
+    add_count = 0
+    del_count = 0
+
+    d = CountDict({'a': 1, 'b': 2, 'c': 3, 'd': 4})
+    add_count += 4
+
+    d.update({'a': 11, 'c': 33})
+    del_count += 2
+    add_count += 2
+
+    assert add_count == d.ab_count == d.af_count
+    assert del_count == d.db_count == d.df_count

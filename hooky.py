@@ -1,7 +1,7 @@
 from collections import UserList, UserDict
 
 
-class Hook:
+class Hook(object):
     def _add_before_func(self, key=None, item=None):
         pass
 
@@ -18,7 +18,7 @@ class Hook:
 class List(Hook, UserList):
 
     def __init__(self, initlist=None, hook_when_init=True):
-        super().__init__()
+        super().__init__(self)
 
         if initlist:
             if hook_when_init:
@@ -28,13 +28,49 @@ class List(Hook, UserList):
 
     def __setitem__(self, i, item):  # x[i] = item, del and add
 
-        # if isinstance(i, slice):
+        if isinstance(i, slice):
+            if not hasattr(item, '__contains__'):
+                raise TypeError('can only assign an iterable')
 
-        # print('start:{}, stop:{}, step:{}'.format(i.start, i.stop, i.step))
-        # print(i.indices())
+            start, stop, step = i.indices(len(self))
 
-        del self[i]
-        self.insert(i, item)
+            ########################################################
+            if step == 1:
+                for one in range(stop - start):
+                    del self[start]
+
+                _i = start
+                for one in item:
+                    self.insert(_i, one)
+                    _i += 1
+
+            else:
+
+                if step > 1:
+                    slice_size = (stop - start) // step
+
+                    if 0 < (stop - start) % step < step:
+                        slice_size += 1
+                else:
+                    slice_size = (start - stop) // abs(step)
+
+                    if 0 < (start - stop) % abs(step) < abs(step):
+                        slice_size += 1
+
+                slice_size = 0 if slice_size < 0 else slice_size
+                if slice_size != len(item):
+                    raise ValueError('attempt to assign sequence of size {} to extended slice of size {}'.format(
+                        len(item), slice_size
+                    ))
+
+                _i = start
+                for one in item:
+                    self[_i] = one
+                    _i += step
+
+        else:
+            del self[i]
+            self.insert(i, item)
 
     # all del action should be here
     def __delitem__(self, i):  # del x[i], del
@@ -81,8 +117,7 @@ class List(Hook, UserList):
 
 class Dict(Hook, UserDict):
     def __init__(self, initdict=None, hook_when_init=True):
-        initdict = initdict or {}
-        super().__init__()
+        super().__init__(self)
 
         if initdict:
             if hook_when_init:

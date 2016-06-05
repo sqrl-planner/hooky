@@ -3,9 +3,9 @@ import os
 
 NAME = "hooky"
 
-VERSION = '0.2.0'
+VERSION = '0.3.0'
 
-DESCRIPTION = 'Python module, classes with hook point to imitate list and dict for add and del'
+DESCRIPTION = 'Python module, classes with hook point to imitate list and dict when add/del items'
 
 LONG_DESCRIPTION = ''
 if os.path.exists('long_description.rst'):
@@ -32,4 +32,6 @@ setup(name=NAME,
       url=URL,
       classifiers=CLASSIFIERS,
       py_modules=['hooky'],
+      tests_require=['nose'],
+      test_suite='nose.collector'
       )
