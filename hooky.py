@@ -3,21 +3,41 @@ from collections import UserList, UserDict
 
 class Hook:
     def _before_add(self, key=None, item=None):
-        pass
+        """
+        before add a item to the object will call this method.
+
+        example: obj[key] = item
+        """
 
     def _after_add(self, key=None, item=None):
-        pass
+        """
+        like _before_add, but after add.
+        """
 
     def _before_del(self, key=None):
-        pass
+        """
+        before delete a item to the object will call this method.
+
+        example: del obj[key]
+        """
 
     def _after_del(self, key=None):
-        pass
+        """
+        like _before_del, but after del.
+        """
 
 
 class List(Hook, UserList):
+    """
+    list like.
+    """
 
     def __init__(self, initlist=None, hook_when_init=True):
+        """
+
+        :param initlist: iterable object
+        :param hook_when_init: run hook points when it is True
+        """
         super().__init__(self)
 
         if initlist:
@@ -116,7 +136,15 @@ class List(Hook, UserList):
 
 
 class Dict(Hook, UserDict):
+    """
+    dict like.
+    """
     def __init__(self, initdict=None, hook_when_init=True):
+        """
+
+        :param initdict: initialized from
+        :param hook_when_init: run hook points when it is True
+        """
         super().__init__(self)
 
         if initdict:
@@ -139,3 +167,6 @@ class Dict(Hook, UserDict):
         self._before_del(key=key)
         del self.data[key]
         self._after_del(key=key)
+
+
+__version__ = '0.3.0'

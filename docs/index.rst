@@ -3,27 +3,10 @@ hooky Documentation
 ===================
 
 hooky is a Python Module have a list like object called List, and a dict like object called Dict.
+
 The difference between UserList/UserDict and List/Dict is that List/Dict have four members which will call
 when List/Dict is changed.
 
-See the demo for more information
-
-
-Installation
-============
-
-Gentoo
-------
-::
-
-    layman -a observer
-    emerge -av hooky
-
-PyPi
-----
-::
-
-    pip3 install hooky
 
 demo
 ----
@@ -32,5 +15,16 @@ demo
     :language: python
     :linenos:
 
-Docs
-----
+
+API
+---
+
+.. automodule:: hooky
+
+.. autoclass:: Hook
+    :members:  _before_add, _after_add, _before_del, _after_del
+
+.. autoclass:: List
+
+.. autoclass:: Dict
+

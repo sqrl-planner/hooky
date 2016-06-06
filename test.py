@@ -1,7 +1,7 @@
-from hooky import List, Dict
+from hooky import Hook, List, Dict
 
 
-class Count:
+class Count(Hook):
     def __init__(self):
         self.ab_count = 0
         self.af_count = 0
@@ -9,16 +9,16 @@ class Count:
         self.db_count = 0
         self.df_count = 0
 
-    def _add_before_func(self, key=None, item=None):
+    def _before_add(self, key=None, item=None):
         self.ab_count += 1
 
-    def _add_after_func(self, key=None, item=None):
+    def _after_add(self, key=None, item=None):
         self.af_count += 1
 
-    def _del_before_func(self, key=None):
+    def _after_del(self, key=None):
         self.db_count += 1
 
-    def _del_after_func(self, key=None):
+    def _before_del(self, key=None):
         self.df_count += 1
 
 
@@ -71,6 +71,7 @@ def test_list_slice():
                 print('l1_e:', l1_e.__class__.__name__, ':', l1_e)
                 print('l2_e:', l1_e.__class__.__name__, ':', l2_e)
                 print()
+                raise AssertionError
 
         try:
             assert l1 == l2
