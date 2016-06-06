@@ -1,6 +1,5 @@
 from hooky import List, Dict
 
-# the List and the Dict have four member: _before_add, _after_add, _before_del and _after_del, it's the hook
 
 class NameList(List):
     def _before_add(self, key=None, item=None):
@@ -8,9 +7,7 @@ class NameList(List):
             raise TypeError('item of NameList must be instance of str, not {}'.format(type(item)))
 
 
-names = NameList()
+names = NameList(['John', 'Alissa'])
 
+# Will raise
 names.append(b'Tom')
-
-
-class Dict
