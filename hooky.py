@@ -1,17 +1,17 @@
 from collections import UserList, UserDict
 
 
-class Hook(object):
-    def _add_before_func(self, key=None, item=None):
+class Hook:
+    def _before_add(self, key=None, item=None):
         pass
 
-    def _add_after_func(self, key=None, item=None):
+    def _after_add(self, key=None, item=None):
         pass
 
-    def _del_before_func(self, key=None):
+    def _before_del(self, key=None):
         pass
 
-    def _del_after_func(self, key=None):
+    def _after_del(self, key=None):
         pass
 
 
@@ -72,20 +72,20 @@ class List(Hook, UserList):
             del self[i]
             self.insert(i, item)
 
-    # all del action should be here
+    # all del action will be here
     def __delitem__(self, i):  # del x[i], del
-        self._del_before_func(key=i)
+        self._before_del(key=i)
         del self.data[i]
-        self._del_after_func(key=i)
+        self._after_del(key=i)
 
     def append(self, item):  # add
         self.insert(len(self), item)
 
-    # all add action should be here
+    # all add action will be here
     def insert(self, i, item):
-        self._add_before_func(key=i, item=item)
+        self._before_add(key=i, item=item)
         self.data.insert(i, item)
-        self._add_after_func(key=i, item=item)
+        self._after_add(key=i, item=item)
 
     def pop(self, i=-1):  # del
         x = self[i]
@@ -125,17 +125,17 @@ class Dict(Hook, UserDict):
             else:
                 self.data.update(initdict)
 
-    # all set action should be here
+    # all set action will be here
     def __setitem__(self, key, item):
         if key in self.keys():
             del self[key]
 
-        self._add_before_func(key=key, item=item)
+        self._before_add(key=key, item=item)
         self.data[key] = item
-        self._add_after_func(key=key, item=item)
+        self._after_add(key=key, item=item)
 
-    # all del action should be here
+    # all del action will be here
     def __delitem__(self, key):
-        self._del_before_func(key=key)
+        self._before_del(key=key)
         del self.data[key]
-        self._del_after_func(key=key)
+        self._after_del(key=key)
