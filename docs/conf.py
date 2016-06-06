@@ -10,7 +10,7 @@ intersphinx_mapping = {'python': ('https://docs.python.org/3', None)}
 import hooky
 
 extensions = ['sphinx.ext.autodoc']
-extensions += ['sphinxcontrib.programoutput']
+# extensions += ['sphinxcontrib.programoutput']
 
 templates_path = ['_templates']
 
@@ -40,18 +40,18 @@ html_theme = "sphinx_rtd_theme"
 
 html_static_path = ['_static']
 
-htmlhelp_basename = 'ipodshuffledoc'
+# htmlhelp_basename = 'ipodshuffledoc'
 
-man_pages = [
-    (master_doc, 'ipodshuffle', u'ipodshuffle Documentation',
-     [author], 1)
-]
+# man_pages = [
+#    (master_doc, 'ipodshuffle', u'ipodshuffle Documentation',
+#     [author], 1)
+#]
 
-texinfo_documents = [
-  (master_doc, 'ipodshuffle', u'ipodshuffle Documentation',
-   author, 'ipodshuffle', 'One line description of project.',
-   'Miscellaneous'),
-]
+#texinfo_documents = [
+#  (master_doc, 'ipodshuffle', u'ipodshuffle Documentation',
+#   author, 'ipodshuffle', 'One line description of project.',
+#   'Miscellaneous'),
+#]
 
 autoclass_content = 'both'
 autodoc_member_order = 'bysource'
