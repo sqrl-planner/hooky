@@ -45,20 +45,21 @@ html_static_path = ['_static']
 # man_pages = [
 #    (master_doc, 'ipodshuffle', u'ipodshuffle Documentation',
 #     [author], 1)
-#]
+# ]
 
-#texinfo_documents = [
+# texinfo_documents = [
 #  (master_doc, 'ipodshuffle', u'ipodshuffle Documentation',
 #   author, 'ipodshuffle', 'One line description of project.',
 #   'Miscellaneous'),
-#]
+# ]
 
 autoclass_content = 'both'
 autodoc_member_order = 'bysource'
 
 latex_elements = {
+
 # The paper size ('letterpaper' or 'a4paper').
-#'papersize': 'letterpaper',
+# 'papersize': 'letterpaper',
 
 # The font size ('10pt', '11pt' or '12pt').
 #'pointsize': '10pt',

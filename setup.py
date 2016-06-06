@@ -1,15 +1,12 @@
 from setuptools import setup
-import os
+
+from hooky import __version__
 
 NAME = "hooky"
 
-VERSION = '0.3.0'
+VERSION = __version__
 
-DESCRIPTION = 'Python module, classes with hook point to imitate list and dict when add/del items'
-
-LONG_DESCRIPTION = ''
-if os.path.exists('long_description.rst'):
-    LONG_DESCRIPTION = open('long_description.rst').read()
+DESCRIPTION = 'Python module, List/Dict classes with hook point to call when the instance is changed.'
 
 
 URL = 'https://github.com/meng89/{}'.format(NAME)
@@ -25,7 +22,7 @@ CLASSIFIERS = [
 setup(name=NAME,
       version=VERSION,
       description=DESCRIPTION,
-      long_description=LONG_DESCRIPTION,
+      # long_description=LONG_DESCRIPTION,
       author='Chen Meng',
       author_email='ObserverChan@gmail.com',
       license='MIT',
@@ -33,5 +30,5 @@ setup(name=NAME,
       classifiers=CLASSIFIERS,
       py_modules=['hooky'],
       tests_require=['nose'],
-      test_suite='nose.collector'
+      test_suite='nose.collector',
       )

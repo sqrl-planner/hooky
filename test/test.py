@@ -39,7 +39,12 @@ def test_list_slice():
     from random import randrange as r
 
     start_time = time()
+
+    times = 0
+
     while True:
+        times += 1
+
         l = ['s'] * r(0, 100)
         ol = ['o'] * r(0, 100)
 
@@ -87,8 +92,13 @@ def test_list_slice():
 
             raise AssertionError
 
-        if time() > start_time + 60 * 0.5:
+        # if time() > start_time + 60 * 0.5:
+        #    break
+
+        if times == 10000:
             break
+
+    print('use random data run times: {}, in {:.2f}s'.format(times, time() - start_time))
 
 
 def test_list_add():
