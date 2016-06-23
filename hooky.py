@@ -1,5 +1,7 @@
 from collections import UserList, UserDict
 
+__version__ = '0.3.0'
+
 
 class Hook:
     def _before_add(self, key=None, item=None):
@@ -155,6 +157,8 @@ class Dict(Hook, UserDict):
 
     # all set action will be here
     def __setitem__(self, key, item):
+        key = self.fix_set_key(key)
+
         if key in self.keys():
             del self[key]
 
@@ -168,5 +172,13 @@ class Dict(Hook, UserDict):
         del self.data[key]
         self._after_del(key=key)
 
+    def __getitem__(self, key):
+        super().__getitem__(self.fix_get_key(key))
 
-__version__ = '0.3.0'
+    @staticmethod
+    def fix_get_key(key):
+        return key
+
+    @staticmethod
+    def fix_set_key(key):
+        return key
