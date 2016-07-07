@@ -1,6 +1,17 @@
-from collections import UserList, UserDict
 
-__version__ = '0.3.0'
+try:
+    from collections import UserList, UserDict
+except ImportError:
+    from UserList import UserList
+    from UserDict import UserDict
+
+try:
+    from collections import MutableMapping
+except ImportError:
+    from abc import MutableMapping
+
+
+__version__ = '0.3.1'
 
 
 class Hook:
@@ -40,7 +51,7 @@ class List(Hook, UserList):
         :param initlist: iterable object
         :param hook_when_init: run hook points when it is True
         """
-        super().__init__(self)
+        UserList.__init__(self)
 
         if initlist:
             if hook_when_init:
@@ -147,7 +158,7 @@ class Dict(Hook, UserDict):
         :param initdict: initialized from
         :param hook_when_init: run hook points when it is True
         """
-        super().__init__(self)
+        UserDict.__init__(self)
 
         if initdict:
             if hook_when_init:
@@ -157,8 +168,6 @@ class Dict(Hook, UserDict):
 
     # all set action will be here
     def __setitem__(self, key, item):
-        key = self.fix_set_key(key)
-
         if key in self.keys():
             del self[key]
 
@@ -172,13 +181,34 @@ class Dict(Hook, UserDict):
         del self.data[key]
         self._after_del(key=key)
 
-    def __getitem__(self, key):
-        super().__getitem__(self.fix_get_key(key))
 
-    @staticmethod
-    def fix_get_key(key):
-        return key
+    ###############################################
+    # for Python 2.7
 
-    @staticmethod
-    def fix_set_key(key):
-        return key
+    def update(self, *args, **kwargs):
+        d = {}
+        d.update(*args, **kwargs)
+
+        for key, value in d.items():
+            self[key] = value
+
+    def pop(self, key, *args):
+
+        try:
+            value = self[key]
+        except KeyError:
+            return args
+
+        else:
+            del self[key]
+            return value
+
+    def popitem(self):
+        try:
+            key = next(iter(self))
+        except StopIteration:
+            raise KeyError
+        value = self[key]
+        # todo
+        del self[key]
+        return key, value

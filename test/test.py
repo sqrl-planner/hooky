@@ -15,11 +15,11 @@ class Count(Hook):
     def _after_add(self, key=None, item=None):
         self.af_count += 1
 
-    def _after_del(self, key=None):
-        self.db_count += 1
-
     def _before_del(self, key=None):
         self.df_count += 1
+
+    def _after_del(self, key=None):
+        self.db_count += 1
 
 
 class CountList(Count, List):
@@ -101,6 +101,9 @@ def test_list_slice():
     print('use random data run times: {}, in {:.2f}s'.format(times, time() - start_time))
 
 
+########################################################################################################################
+# for List
+########################################################################################################################
 def test_list_add():
     add_count = 0
     l = CountList()
@@ -153,6 +156,9 @@ def test_list_add_del():
     assert del_count == l.db_count == l.df_count
 
 
+########################################################################################################################
+# for Dict
+########################################################################################################################
 def test_dict_add():
     add_count = 0
 
@@ -174,8 +180,14 @@ def test_dict_del():
 
     d = CountDict({'hello': 'world', 42: None, None: 'a', (None, 's'): 3})
 
+    #del d[None]
+    #del_count += 1
+
     d.pop(42)
     del_count += 1
+
+    #d.popitem()
+    #del_count += 1
 
     d[None] = 'b'
     del_count += 1
