@@ -9,7 +9,8 @@ class NameList(List):
 
 names = NameList(['Sue', 'Alissa'])
 
-# Will raise TypeError here
+
+# would raise TypeError:
 names.append(b'Tom')
 
 

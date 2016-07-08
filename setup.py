@@ -1,15 +1,12 @@
 from setuptools import setup
 
-from hooky import __version__
+import hooky
 
-NAME = "hooky"
+NAME = 'hooky'
 
-VERSION = __version__
+DESCRIPTION = 'A list-like and a dict-like classes with hook point.'
 
-DESCRIPTION = 'a Python module, List/Dict classes with hook point to call when the instance is changed.'
-
-
-URL = 'https://github.com/meng89/{}'.format(NAME)
+URL = 'https://github.com/meng89/' + NAME
 
 CLASSIFIERS = [
     'Intended Audience :: Developers',
@@ -26,9 +23,8 @@ CLASSIFIERS = [
 ]
 
 setup(name=NAME,
-      version=VERSION,
+      version=hooky.__version__,
       description=DESCRIPTION,
-      # long_description=LONG_DESCRIPTION,
       author='Chen Meng',
       author_email='ObserverChan@gmail.com',
       license='MIT',

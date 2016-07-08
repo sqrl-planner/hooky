@@ -5,7 +5,7 @@ except ImportError:
     from UserDict import UserDict
 
 
-__version__ = '0.3.1'
+__version__ = '0.3.4'
 
 
 class Hook:
@@ -176,21 +176,18 @@ class Dict(Hook, UserDict):
         self._after_del(key=key)
 
     ###############################################
-    # for Python 2.7 below:
+    # for Python 2.7 need:
     def update(self, *args, **kwargs):
         d = {}
         d.update(*args, **kwargs)
-
         for key, value in d.items():
             self[key] = value
 
     def pop(self, key, *args):
-
         try:
             value = self[key]
         except KeyError:
             return args
-
         else:
             del self[key]
             return value
@@ -202,7 +199,6 @@ class Dict(Hook, UserDict):
         except StopIteration:
             raise KeyError
         value = self[key]
-        # todo
         del self[key]
         return key, value
 
