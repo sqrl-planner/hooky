@@ -1,4 +1,17 @@
-from collections import UserList, UserDict
+
+try:
+    from collections import UserList, UserDict
+except ImportError:
+    from UserList import UserList
+    from UserDict import UserDict
+
+try:
+    from collections import MutableMapping
+except ImportError:
+    from abc import MutableMapping
+
+
+__version__ = '0.3.1'
 
 
 class Hook:
@@ -38,7 +51,7 @@ class List(Hook, UserList):
         :param initlist: iterable object
         :param hook_when_init: run hook points when it is True
         """
-        super().__init__(self)
+        UserList.__init__(self)
 
         if initlist:
             if hook_when_init:
@@ -145,7 +158,7 @@ class Dict(Hook, UserDict):
         :param initdict: initialized from
         :param hook_when_init: run hook points when it is True
         """
-        super().__init__(self)
+        UserDict.__init__(self)
 
         if initdict:
             if hook_when_init:
@@ -169,4 +182,33 @@ class Dict(Hook, UserDict):
         self._after_del(key=key)
 
 
-__version__ = '0.3.0'
+    ###############################################
+    # for Python 2.7
+
+    def update(self, *args, **kwargs):
+        d = {}
+        d.update(*args, **kwargs)
+
+        for key, value in d.items():
+            self[key] = value
+
+    def pop(self, key, *args):
+
+        try:
+            value = self[key]
+        except KeyError:
+            return args
+
+        else:
+            del self[key]
+            return value
+
+    def popitem(self):
+        try:
+            key = next(iter(self))
+        except StopIteration:
+            raise KeyError
+        value = self[key]
+        # todo
+        del self[key]
+        return key, value
