@@ -6,7 +6,7 @@ NAME = "hooky"
 
 VERSION = __version__
 
-DESCRIPTION = 'Python module, List/Dict classes with hook point to call when the instance is changed.'
+DESCRIPTION = 'a Python module, List/Dict classes with hook point to call when the instance is changed.'
 
 
 URL = 'https://github.com/meng89/{}'.format(NAME)
