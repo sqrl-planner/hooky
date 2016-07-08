@@ -3,23 +3,23 @@ from hooky import Hook, List, Dict
 
 class Count(Hook):
     def __init__(self):
-        self.ab_count = 0
-        self.af_count = 0
+        self.before_add_count = 0
+        self.after_add_count = 0
 
-        self.db_count = 0
-        self.df_count = 0
+        self.before_del_count = 0
+        self.after_del_count = 0
 
     def _before_add(self, key=None, item=None):
-        self.ab_count += 1
+        self.before_add_count += 1
 
     def _after_add(self, key=None, item=None):
-        self.af_count += 1
+        self.after_add_count += 1
 
     def _before_del(self, key=None):
-        self.df_count += 1
+        self.before_del_count += 1
 
     def _after_del(self, key=None):
-        self.db_count += 1
+        self.after_del_count += 1
 
 
 class CountList(Count, List):
@@ -120,9 +120,9 @@ def test_list_add():
     l += [3, 'a', 'hello', 'world']
     add_count += 4
 
-    assert add_count == l.ab_count == l.af_count
+    assert add_count == l.before_add_count == l.after_add_count
 
-    assert 0 == l.db_count == l.df_count
+    assert 0 == l.before_del_count == l.after_del_count
 
 
 def test_list_del():
@@ -135,9 +135,9 @@ def test_list_del():
     l.remove(5)
     del_count += 1
 
-    assert del_count == l.db_count == l.df_count
+    assert del_count == l.before_del_count == l.after_del_count
 
-    assert 0 == l.ab_count == l.af_count
+    assert 0 == l.before_add_count == l.after_add_count
 
 
 def test_list_add_del():
@@ -151,9 +151,9 @@ def test_list_add_del():
     del_count += 1
     add_count += 1
 
-    assert add_count == l.ab_count == l.af_count
+    assert add_count == l.before_add_count == l.after_add_count
 
-    assert del_count == l.db_count == l.df_count
+    assert del_count == l.before_del_count == l.after_del_count
 
 
 ########################################################################################################################
@@ -170,9 +170,9 @@ def test_dict_add():
     d.update({None: 'a', (None, 's'): 3})
     add_count += 2
 
-    assert add_count == d.ab_count == d.af_count
+    assert add_count == d.before_add_count == d.after_add_count
 
-    assert 0 == d.db_count == d.df_count
+    assert 0 == d.before_del_count == d.after_del_count
 
 
 def test_dict_del():
@@ -180,19 +180,19 @@ def test_dict_del():
 
     d = CountDict({'hello': 'world', 42: None, None: 'a', (None, 's'): 3})
 
-    #del d[None]
-    #del_count += 1
+    del d['hello']
+    del_count += 1
 
     d.pop(42)
     del_count += 1
 
-    #d.popitem()
-    #del_count += 1
-
     d[None] = 'b'
     del_count += 1
 
-    assert del_count == d.db_count == d.df_count
+    d.popitem()
+    del_count += 1
+
+    assert del_count == d.before_del_count == d.after_del_count
 
 
 def test_dict_add_del():
@@ -206,5 +206,5 @@ def test_dict_add_del():
     del_count += 2
     add_count += 2
 
-    assert add_count == d.ab_count == d.af_count
-    assert del_count == d.db_count == d.df_count
+    assert add_count == d.before_add_count == d.after_add_count
+    assert del_count == d.before_del_count == d.after_del_count

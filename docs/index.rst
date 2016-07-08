@@ -1,14 +1,13 @@
-===================
-hooky Documentation
-===================
+Hooky
+=====
 
-hooky is a Python Module have a list like object called List, and a dict like object called Dict.
+Hooky is a Python Module have a list like object called List, and a dict like object called Dict.
 
 The difference between UserList/UserDict and List/Dict is that List/Dict have four members which will call
 when List/Dict is changed.
 
 
-demo
+Demo
 ----
 
 .. literalinclude:: demo.py
@@ -16,8 +15,8 @@ demo
     :linenos:
 
 
-API
----
+API Reference
+-------------
 
 .. automodule:: hooky
 

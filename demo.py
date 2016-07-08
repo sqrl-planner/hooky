@@ -1,19 +1,20 @@
-
-def f(*args, **kwargs):
-    print(args)
-    print(kwargs)
+from hooky import Dict
 
 
-class A:
-    def update(self, *args, **kwargs):
+class MyDict(Dict):
+    def _before_del(self, key=None):
+        print('before_del, key:', key)
 
-        print(args)
-        print(kwargs)
-        print()
-        print()
+    def _after_del(self, key=None):
+        print('after_del, key:', key)
 
-        f(*args, **kwargs)
 
-a = A()
+d = MyDict({'a': 1, 'b': 2, 'c': 3, None: 4})
 
-a.update({'a': 1, 'b': 2}, c=3, d=4)
+del d[None]
+
+del d['a']
+
+k, v = d.popitem()
+
+print(d)
