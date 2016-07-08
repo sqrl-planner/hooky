@@ -1,14 +1,8 @@
-
 try:
     from collections import UserList, UserDict
 except ImportError:
     from UserList import UserList
     from UserDict import UserDict
-
-try:
-    from collections import MutableMapping
-except ImportError:
-    from abc import MutableMapping
 
 
 __version__ = '0.3.1'
@@ -29,7 +23,7 @@ class Hook:
 
     def _before_del(self, key=None):
         """
-        before delete a item to the object will call this method.
+        before delete a item from the object will call this method.
 
         example: del obj[key]
         """
@@ -181,10 +175,8 @@ class Dict(Hook, UserDict):
         del self.data[key]
         self._after_del(key=key)
 
-
     ###############################################
-    # for Python 2.7
-
+    # for Python 2.7 below:
     def update(self, *args, **kwargs):
         d = {}
         d.update(*args, **kwargs)
@@ -206,9 +198,13 @@ class Dict(Hook, UserDict):
     def popitem(self):
         try:
             key = next(iter(self))
+            print('popitem, key:', key)
         except StopIteration:
             raise KeyError
         value = self[key]
         # todo
         del self[key]
         return key, value
+
+    def __iter__(self):
+        return iter(self.data)
