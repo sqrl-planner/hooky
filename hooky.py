@@ -5,10 +5,10 @@ except ImportError:
     from UserDict import UserDict
 
 
-__version__ = '0.3.4'
+__version__ = '0.3.5'
 
 
-class Hook:
+class Hook(object):
     def _before_add(self, key=None, item=None):
         """
         before add a item to the object will call this method.
