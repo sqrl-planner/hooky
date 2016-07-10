@@ -4,7 +4,7 @@ import hooky
 
 NAME = 'hooky'
 
-DESCRIPTION = 'A list-like and a dict-like classes with hook point.'
+DESCRIPTION = 'A module contain list-like and a dict-like classes with hook point.'
 
 URL = 'https://github.com/meng89/' + NAME
 
@@ -17,6 +17,7 @@ CLASSIFIERS = [
     'Programming Language :: Python :: 3',
     'Programming Language :: Python :: 3.3',
     'Programming Language :: Python :: 3.4',
+    'Programming Language :: Python :: 3.5',
     'Programming Language :: Python :: Implementation :: CPython',
     'Programming Language :: Python :: Implementation :: PyPy',
     'Topic :: Software Development :: Libraries :: Python Modules',

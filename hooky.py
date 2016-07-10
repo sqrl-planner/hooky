@@ -4,8 +4,9 @@ except ImportError:
     from UserList import UserList
     from UserDict import UserDict
 
+import copy
 
-__version__ = '0.3.5'
+__version__ = '0.3.6'
 
 
 class Hook(object):
@@ -136,9 +137,20 @@ class List(Hook, UserList):
         return self
 
     def __imul__(self, n):  # x *= y, add
-        old_data = self.copy()
-        for x in range(n):
-            self.extend(old_data)
+        if not isinstance(n, int):
+            raise TypeError("can't multiply sequence by non-int of type '{}'".format(type(n)))
+
+        if n <= 0:
+            self.clear()
+
+        if n == 1:
+            pass
+
+        elif n > 1:
+            old_data = copy.copy(self.data)
+            for time in range(n - 1):
+                self.extend(old_data)
+
         return self
 
 

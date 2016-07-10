@@ -108,8 +108,14 @@ def test_list_add():
     add_count = 0
     l = CountList()
 
-    l.append(99)
+    l.append(6)
     add_count += 1
+
+    l.append(3)
+    add_count += 1
+
+    l *= 3
+    add_count += 4
 
     l.extend(['a', 'hello', None, {None: 's'}])
     add_count += 4

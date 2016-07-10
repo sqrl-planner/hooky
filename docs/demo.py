@@ -21,3 +21,9 @@ class Files(Dict):
 
         if '/' in key:
             raise KeyError('invalid filename')
+
+
+files = Files()
+
+# would raise keyError
+files['tes/t.txt'] = b'text'
