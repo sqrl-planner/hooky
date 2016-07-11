@@ -1,3 +1,5 @@
+# coding=utf-8
+
 try:
     from collections import UserList, UserDict
 except ImportError:
@@ -6,7 +8,7 @@ except ImportError:
 
 import copy
 
-__version__ = '0.3.6'
+__version__ = '0.3.7'
 
 
 class Hook(object):
@@ -207,7 +209,6 @@ class Dict(Hook, UserDict):
     def popitem(self):
         try:
             key = next(iter(self))
-            print('popitem, key:', key)
         except StopIteration:
             raise KeyError
         value = self[key]
