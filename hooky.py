@@ -24,14 +24,14 @@ class Hook(object):
         like _before_add, but after add.
         """
 
-    def _before_del(self, key):
+    def _before_del(self, key, item):
         """
         before delete a item from the object will call this method.
 
         example: del obj[key]
         """
 
-    def _after_del(self, key):
+    def _after_del(self, key, item):
         """
         like _before_del, but after del.
         """
@@ -104,9 +104,10 @@ class List(Hook, UserList):
 
     # all del action will be here
     def __delitem__(self, i):  # del x[i], del
-        self._before_del(key=i)
+        item = self[i]
+        self._before_del(key=i, item=item)
         del self.data[i]
-        self._after_del(key=i)
+        self._after_del(key=i, item=item)
 
     def append(self, item):  # add
         self.insert(len(self), item)
@@ -185,9 +186,10 @@ class Dict(Hook, UserDict):
 
     # all del action will be here
     def __delitem__(self, key):
-        self._before_del(key=key)
+        item = self[key]
+        self._before_del(key=key, item=item)
         del self.data[key]
-        self._after_del(key=key)
+        self._after_del(key=key, item=item)
 
     ###############################################
     # for Python 2.7 need:

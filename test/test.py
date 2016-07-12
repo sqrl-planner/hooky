@@ -9,16 +9,16 @@ class Count(Hook):
         self.before_del_count = 0
         self.after_del_count = 0
 
-    def _before_add(self, key=None, item=None):
+    def _before_add(self, key, item):
         self.before_add_count += 1
 
-    def _after_add(self, key=None, item=None):
+    def _after_add(self, key, item):
         self.after_add_count += 1
 
-    def _before_del(self, key=None):
+    def _before_del(self, key, item):
         self.before_del_count += 1
 
-    def _after_del(self, key=None):
+    def _after_del(self, key, item):
         self.after_del_count += 1
 
 

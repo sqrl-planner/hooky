@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# coding=utf-8
 
 from hooky import List
 
@@ -10,10 +11,10 @@ class MyList(List):
     def _after_add(self, key, item):
         print(' after add, key: {}, item: {}'.format(key, repr(item)))
 
-    def _before_del(self, key):
-        print('before_del, key: ', key)
+    def _before_del(self, key, item):
+        print('before_del, key: {}, item: {}'.format(key, repr(self[key])))
 
-    def _after_del(self, key):
+    def _after_del(self, key, item):
         print(' after_del, key: ', key)
 
 
