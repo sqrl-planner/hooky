@@ -12,26 +12,26 @@ __version__ = '0.3.7'
 
 
 class Hook(object):
-    def _before_add(self, key=None, item=None):
+    def _before_add(self, key, item):
         """
         before add a item to the object will call this method.
 
         example: obj[key] = item
         """
 
-    def _after_add(self, key=None, item=None):
+    def _after_add(self, key, item):
         """
         like _before_add, but after add.
         """
 
-    def _before_del(self, key=None):
+    def _before_del(self, key):
         """
         before delete a item from the object will call this method.
 
         example: del obj[key]
         """
 
-    def _after_del(self, key=None):
+    def _after_del(self, key):
         """
         like _before_del, but after del.
         """

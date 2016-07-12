@@ -24,6 +24,7 @@ API Reference
     :members:  _before_add, _after_add, _before_del, _after_del
 
 .. autoclass:: List
+    :show-inheritance:
 
 .. autoclass:: Dict
-
+    :show-inheritance:

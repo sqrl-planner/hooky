@@ -1,29 +1,37 @@
 from hooky import List, Dict
 
 
-# demo for List
+# List
 class NameList(List):
     def _before_add(self, key=None, item=None):
         if not isinstance(item, str):
-            raise TypeError('item of NameList must be instance of str, not {}'.format(item.__class__.__name__))
+            print('Type: {} is not well'.format(type(item)))
+            # of cause you may want raise here
+        else:
+            print('fine')
 
+# two fine
 names = NameList(['Sue', 'Alissa'])
 
+# fine
+names.append('ben')
 
-# would raise TypeError:
+# not well
 names.append(b'Tom')
 
 
+# Dict
 class Files(Dict):
     def _before_add(self, key=None, item=None):
         if not isinstance(key, str):
             raise TypeError
-
         if '/' in key:
             raise KeyError('invalid filename')
 
-
 files = Files()
 
-# would raise keyError
+# fine
+files['1.xml'] = '<test></test>'
+
+# raise keyError:
 files['tes/t.txt'] = b'text'
