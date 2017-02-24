@@ -18,7 +18,7 @@ source_suffix = '.rst'
 
 master_doc = 'index'
 
-project = u'ipodshuffle'
+project = u'hooky'
 copyright = u'2016, Chen Meng'
 author = u'Chen Meng'
 
