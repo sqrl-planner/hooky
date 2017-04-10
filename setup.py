@@ -2,6 +2,10 @@ from setuptools import setup
 
 import hooky
 
+import ssl
+
+ssl._create_default_https_context = ssl._create_unverified_context
+
 NAME = 'hooky'
 
 DESCRIPTION = 'A module contain list-like and a dict-like classes with hook point.'
@@ -17,7 +21,6 @@ CLASSIFIERS = [
     'Programming Language :: Python :: 3.4',
     'Programming Language :: Python :: 3.5',
     'Programming Language :: Python :: Implementation :: CPython',
-    'Programming Language :: Python :: Implementation :: PyPy3',
     'Topic :: Software Development :: Libraries :: Python Modules',
 ]
 
