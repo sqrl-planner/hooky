@@ -1,14 +1,10 @@
 # coding=utf-8
 
-try:
-    from collections import UserList, UserDict
-except ImportError:
-    from UserList import UserList
-    from UserDict import UserDict
+from collections import MutableMapping, Sequence
 
 import copy
 
-__version__ = '0.4.1'
+__version__ = '0.5.0'
 
 
 class Hook(object):
@@ -37,7 +33,24 @@ class Hook(object):
         """
 
 
-class List(Hook, UserList):
+class Check:
+    def _add_check(self, key, value):
+        pass
+
+    def _del_check(self, key, value):
+        pass
+
+
+class Garud:
+
+    def _add_garud(self, key, value):
+        return key, value
+
+    def _del_garud(self, key):
+        return key
+
+
+class List(Hook, Sequence):
     """
     list like.
     """
@@ -48,13 +61,14 @@ class List(Hook, UserList):
         :param initlist: iterable object
         :param hook_when_init: run hook points when it is True
         """
-        UserList.__init__(self)
+
+        self._data = []
 
         if initlist:
             if hook_when_init:
                 self.extend(initlist)
             else:
-                self.data.extend(initlist)
+                self._data.extend(initlist)
 
     def __setitem__(self, i, item):  # x[i] = item, del and add
 
@@ -106,7 +120,7 @@ class List(Hook, UserList):
     def __delitem__(self, i):  # del x[i], del
         item = self[i]
         self._before_del(key=i, item=item)
-        del self.data[i]
+        del self._data[i]
         self._after_del(key=i, item=item)
 
     def append(self, item):  # add
@@ -115,7 +129,7 @@ class List(Hook, UserList):
     # all add action will be here
     def insert(self, i, item):
         self._before_add(key=i, item=item)
-        self.data.insert(i, item)
+        self._data.insert(i, item)
         self._after_add(key=i, item=item)
 
     def pop(self, i=-1):  # del
@@ -150,30 +164,64 @@ class List(Hook, UserList):
             pass
 
         elif n > 1:
-            old_data = copy.copy(self.data)
+            old_data = copy.copy(self._data)
             for time in range(n - 1):
                 self.extend(old_data)
 
         return self
 
+    def __getitem__(self, i): return self._data[i]
 
-class Dict(Hook, UserDict):
-    """
-    dict like.
-    """
-    def __init__(self, initdict=None, hook_when_init=True):
-        """
+    def __len__(self): return len(self._data)
 
-        :param initdict: initialized from
-        :param hook_when_init: run hook points when it is True
-        """
-        UserDict.__init__(self)
+    def __repr__(self): return repr(self._data)
 
-        if initdict:
-            if hook_when_init:
-                self.update(initdict)
-            else:
-                self.data.update(initdict)
+    def __lt__(self, other): return self._data < self.__cast(other)
+
+    def __le__(self, other): return self._data <= self.__cast(other)
+
+    def __eq__(self, other): return self._data == self.__cast(other)
+
+    def __gt__(self, other): return self._data > self.__cast(other)
+
+    def __ge__(self, other): return self._data >= self.__cast(other)
+
+    def __cast(self, other):
+        return other._data if isinstance(other, List) else other
+
+    def reverse(self): self._data.reverse()
+
+    def sort(self, *args, **kwds): self._data.sort(*args, **kwds)
+
+
+class Dict(Hook, MutableMapping):
+    def __init__(*args, **kwargs):
+        if not args:
+            raise TypeError("descriptor '__init__' of 'Dict' object "
+                            "needs an argument")
+
+        self, *args = args
+
+        if len(args) > 1:
+            raise TypeError('expected at most 1 arguments, got %d' % len(args))
+
+        if args:
+            dict_ = args[0]
+
+        elif 'dict' in kwargs:
+            dict_ = kwargs.pop('dict')
+            import warnings
+            warnings.warn("Passing 'dict' as keyword argument is deprecated",
+                          PendingDeprecationWarning, stacklevel=2)
+        else:
+            dict_ = None
+
+        self._data = {}
+
+        if dict_ is not None:
+            self.update(dict_)
+        if len(kwargs):
+            self.update(kwargs)
 
     # all set action will be here
     def __setitem__(self, key, item):
@@ -181,41 +229,37 @@ class Dict(Hook, UserDict):
             del self[key]
 
         self._before_add(key=key, item=item)
-        self.data[key] = item
+        self._data[key] = item
         self._after_add(key=key, item=item)
 
     # all del action will be here
     def __delitem__(self, key):
         item = self[key]
         self._before_del(key=key, item=item)
-        del self.data[key]
+        del self._data[key]
         self._after_del(key=key, item=item)
 
-    ###############################################
-    # for Python 2.7 need:
-    def update(self, *args, **kwargs):
-        d = {}
-        d.update(*args, **kwargs)
-        for key, value in d.items():
-            self[key] = value
-
-    def pop(self, key, *args):
-        try:
-            value = self[key]
-        except KeyError:
-            return args
-        else:
-            del self[key]
-            return value
-
-    def popitem(self):
-        try:
-            key = next(iter(self))
-        except StopIteration:
-            raise KeyError
-        value = self[key]
-        del self[key]
-        return key, value
-
     def __iter__(self):
-        return iter(self.data)
+        return iter(self._data)
+
+    def __getitem__(self, key):
+        if key in self._data:
+            return self._data[key]
+        if hasattr(self.__class__, "__missing__"):
+            return self.__class__.__missing__(self, key)
+        raise KeyError(key)
+
+    def __len__(self): return len(self._data)
+
+    def copy(self):
+        if self.__class__ is Dict:
+            return Dict(self._data.copy())
+        import copy
+        data = self._data
+        try:
+            self._data = {}
+            c = copy.copy(self)
+        finally:
+            self._data = data
+        c.update(self)
+        return c

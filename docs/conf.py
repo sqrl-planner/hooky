@@ -19,7 +19,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 project = u'hooky'
-copyright = u'2016, Chen Meng'
+copyright = u'2017, Chen Meng'
 author = u'Chen Meng'
 
 
