@@ -1,6 +1,13 @@
 # coding=utf-8
 
-from collections import MutableMapping, Sequence
+import sys
+
+if sys.version_info[:2] >= (3, 8):
+    from collections.abc import MutableMapping
+else:
+    from collections import MutableMapping
+   
+from collections import Sequence
 
 import copy
 
